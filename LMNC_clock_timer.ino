@@ -1,13 +1,34 @@
+/*
+	consider this code open source. I give express permission for anyone
+	to use, edit, or distribute this code for any reason. This code is
+	untested, so use at your own risk??? It's probably fine. Please link
+	to my github if you distribute or quote this code anywhere. Thanks!
+	https://github.com/Skuzee
+*/
+
+/* Hiya~~~~
+	This should produce a pulse between once per second (TICKS_PER_MINUTE_MAX)
+	and once per minute (TICKS_PER_MINUTE_MIN).
+	You may need to change the input/output pin numbers. (RELAY_PIN) (POT_PIN)
+	The length of the relay pulse is set via (RELAY_PULSE_LENGTH)
+	The timeout period is set for 60 seconds (TIMEOUT_PERIOD)
+
+	I hope this helps! (I hope this works!)
+	It compiles fine for an arduino nano, but I haven't tested it.
+
+	<3 J3
+*/
+
 
 // Ticks per minute
 #define TICKS_PER_MINUTE_MIN 1  // once per minute
-#define TICKS_PER_MINUTE_MAX 60 // once per second
+#define TICKS_PER_MINUTE_MAX 60 // 60 times per minute
 
 // length of pulse in milliseconds
 // might need adjusting
 #define RELAY_PULSE_LENGTH 100
-// time out period in seconds
-#define TIMEOUT_PERIOD 60
+// time out period in milliseconds
+#define TIMEOUT_PERIOD 60000
 
 // input pins
 #define RELAY_PIN 1
