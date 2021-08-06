@@ -63,18 +63,31 @@ if (potValue != prevPotValue)
 // if a certain time has elapsed, only tick once per minute
 // this should never be true while the pot is being moved
 if (millis() - startTime >= TIMEOUT_PERIOD)
-	pulseTheRelay(TICKS_PER_MINUTE_MIN);
+	updateTheRelay(TICKS_PER_MINUTE_MIN);
 else
-	pulseTheRelay(potValue);
+	updateTheRelay(potValue);
 }
 
-void pulseTheRelay(unsigned int freq) {
+void updateTheRelay(unsigned int freq) {
 
-	// calculate millisecond delay from freq
-	unsigned int relayDelay = 60000 / freq;
+static long relayStartTime;
+static bool relayIsOn;
 
-	delay(relayDelay);
-	digitalWrite(RELAY_PIN, HIGH);
-	delay(RELAY_PULSE_LENGTH);
-	digitalWrite(RELAY_PIN, LOW);
- }
+// calculate millisecond delay from freq
+unsigned int relayDelay = (60000 / freq) - RELAY_PULSE_LENGTH;
+
+	// if the relay is off and the timer has counted to relayDelay:
+	// turn on relay and reset timer
+	if (!relayIsOn && (millis() - relayStartTime >= relayDelay)){
+		digitalWrite(RELAY_PIN, HIGH);
+		relayIsOn = true;
+		relayStartTime = millis();
+	}
+	// if the relay is on and the timer has counted to RELAY_PULSE_LENGTH:
+	// turn off the relay and reset timer
+	else if (relayIsOn && (millis() - relayStartTime >= RELAY_PULSE_LENGTH)) {
+			digitalWrite(RELAY_PIN, LOW);
+			relayIsOn = false;
+			relayStartTime = millis();
+	}
+}
